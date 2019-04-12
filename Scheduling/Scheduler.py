@@ -2,7 +2,7 @@ import json
 import queue
 from abc import ABC, abstractmethod
 from .JobGenerator import PoissonGenerator
-from .Utils import Encoder
+from .Utils import Encoder, getArgs
 
 '''
 A JobScheduler is the final component of scheduling and that serves as the
@@ -50,7 +50,9 @@ class JobScheduler(ABC):
 
 # A basic first-come-first-serve scheduler.
 class FCFSScheduler(JobScheduler):
-    def __init__(self, args):
+    def __init__(self, args=None):
+        if args is None:
+            args = getArgs()
         super().__init__(args)
 
     def getJob(self, data):
