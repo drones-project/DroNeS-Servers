@@ -4,15 +4,12 @@
    "type":"object",
    "properties":{
       "uid":{
-         "description":"Unique ID of a job",
          "type":"integer"
       },
       "creation_time":{
-         "description":"Creation time of the job",
          "type":"integer"
       },
       "content":{
-         "description":"Content of the job",
          "type":"string"
       },
       "cost_function":{
@@ -20,20 +17,15 @@
          "type":"object",
          "properties":{
             "type":{
-               "description":"Type of cost function used",
-               "type":"string",
-               "default":"naive"
+               "type":"string"
             },
             "reward":{
-               "description":"Reward at a given time",
                "type":"integer"
             },
             "penalty":{
-               "description":"Penalty if job not completed",
                "type":"integer"
             },
             "valid_time":{
-               "description":"The time the goods have to be delivered by",
                "type":"integer"
             }
          },
@@ -45,32 +37,11 @@
          ]
       },
       "pick_up":{
-         "description":"Lat lon of pickup",
-         "type":"object",
-         "properties":{
-           "x":{
-             "description":"Latitude of the pickup location",
-             "type":"int"
-           },
-           "y":{
-             "description":"Longitude of the pickup location",
-             "type":"int"
-           }
-         }
+         "type":"object"
       },
       "destination":{
-        "description":"Lat lon of dropoff",
-        "type":"object",
-        "properties":{
-          "x":{
-            "description":"Latitude of the destination location",
-            "type":"int"
-          },
-          "y":{
-            "description":"Longitude of the destination location",
-            "type":"int"
-          }
-        }
+         "type":"object"
+      }
    },
    "required":[
       "uid",
