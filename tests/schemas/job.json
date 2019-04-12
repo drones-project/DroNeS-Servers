@@ -45,19 +45,32 @@
          ]
       },
       "pick_up":{
-         "description":"List of pick up coordinates",
-         "type":"array",
-         "items":{
-            "type":"number"
+         "description":"Lat lon of pickup",
+         "type":"object",
+         "properties":{
+           "x":{
+             "description":"Latitude of the pickup location",
+             "type":"int"
+           },
+           "y":{
+             "description":"Longitude of the pickup location",
+             "type":"int"
+           }
          }
       },
       "destination":{
-         "description":"List of destination coordinates",
-         "type":"array",
-         "items":{
-            "type":"number"
-         }
-      }
+        "description":"Lat lon of dropoff",
+        "type":"object",
+        "properties":{
+          "x":{
+            "description":"Latitude of the destination location",
+            "type":"int"
+          },
+          "y":{
+            "description":"Longitude of the destination location",
+            "type":"int"
+          }
+        }
    },
    "required":[
       "uid",
