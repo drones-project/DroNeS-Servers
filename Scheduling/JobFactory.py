@@ -23,7 +23,7 @@ def randomCoords(coords, radius):
     random_lat = coords[0] + (dy / ONE_DEG)
     random_lon = coords[1] + \
         (dx / (ONE_DEG * math.cos(coords[0] * math.pi / 180)))
-    return [random_lat, random_lon]
+    return { "x" : random_lat, "y" : random_lon }
 
 
 '''
