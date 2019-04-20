@@ -53,6 +53,7 @@ class Job:
         self.uid = None
         self.creation_time = None
         self.content = None
+        self.weight = None
         self.cost_function = None
         self.pick_up = None
         self.destination = None
@@ -93,10 +94,11 @@ class JobFactory:
         # Assigning item to job
         item = self.__getRandomItem()
         job.content = item['item']
+        job.weight = item['weight']
         # Assigning cost function
-        reward = random.randint(item['reward'][0], item['reward'][1])
-        penalty = random.randint(item['penalty'][0], item['penalty'][1])
-        valid_for = random.randint(item['valid_for'][0], item['valid_for'][1])
+        reward = item['reward']
+        penalty = item['penalty']
+        valid_for = item['valid_for']
         job.cost_function = NaiveCostFunction(reward, penalty, valid_for)
         # Assigning pick_up and destination
         job.pick_up = randomCoords(self.args.origin, self.args.radius)

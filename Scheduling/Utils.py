@@ -22,11 +22,14 @@ def getArgs():
     file = os.path.join(os.path.dirname(__file__), 'config.ini')
     config.read(file)
 
-    for (item, params) in config['Jobs'].items():
-        entry = {'item': item,
-                 'reward': eval(params)[0],
-                 'penalty': eval(params)[1],
-                 'valid_for': eval(params)[2]}
+    for s in config.sections():
+        if not s.startswith('Job:'):
+            continue
+        entry = {'item': s[len('Job:'):],
+                 'weight': float(config[s]['Weight']),
+                 'reward': float(config[s]['Reward']),
+                 'penalty': float(config[s]['Penalty']),
+                 'valid_for': float(config[s]['Valid_Time'])}
         args.job_items.append(entry)
 
     args.origin = eval(config['Settings']['dispatch_origin'])
