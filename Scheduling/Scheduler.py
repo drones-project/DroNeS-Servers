@@ -43,6 +43,9 @@ class JobScheduler(ABC):
     def stop(self):
         self.generator.stop()
 
+    def updateTimescale(self, timescale):
+        self.generator.updateTimescale(timescale)
+
     @abstractmethod
     def getJob(self, data):
         pass
