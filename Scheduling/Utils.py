@@ -16,6 +16,22 @@ class Args:
         self.generator_params = None
 
 
+class mockArgs:
+    def __init__(self):
+        self.job_items = [
+            {
+                "item": "mock_item",
+                "weight": 10,
+                "reward": 10,
+                "penalty": 10,
+                "valid_for": 10
+            }
+        ]
+        self.origin = [0, 0]
+        self.radius = 3000
+        self.generator_params = 0.1
+
+
 def getArgs():
     args = Args()
     config = configparser.ConfigParser()

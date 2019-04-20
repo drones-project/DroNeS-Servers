@@ -4,21 +4,7 @@ import queue
 import unittest
 from jsonschema import validate
 from Scheduling.JobGenerator import PoissonGenerator
-
-
-class mockArgs:
-    def __init__(self):
-        self.job_items = [
-            {
-                "item": "mock_item",
-                "reward": [0, 0],
-                "penalty": [0, 0],
-                "valid_for": [0, 0],
-            }
-        ]
-        self.origin = [0, 0]
-        self.radius = 3000
-        self.generator_params = 0.1
+from Scheduling.Utils import mockArgs
 
 
 # JSON schema loader
