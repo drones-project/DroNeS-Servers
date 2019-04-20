@@ -10,6 +10,7 @@ app = Flask(__name__)
 s = FCFSScheduler()
 s.start()
 
+
 @app.route('/')
 def home():
     return "This is the root directory of the web server."
