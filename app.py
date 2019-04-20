@@ -30,7 +30,17 @@ def routes():
 def jobs():
     if request.is_json:
         app.logger.info(json.dumps(request.json))
-        return s.getJob(1)
+        return s.getJob(request.json)
+    else:
+        return abort(400)
+
+
+@app.route('/update_timescale', methods=['POST'])
+def update_timescale():
+    if request.is_json:
+        app.logger.info(json.dumps(request.json))
+        s.updateTimescale(int(request.json['timescale']))
+        return jsonify({'success': 'true'}), 200
     else:
         return abort(400)
 
