@@ -34,14 +34,14 @@ class JobGenerator(ABC):
     def start(self):
         if not self.running:
             self.running = True
-            self.t = Thread(target=self.add_to_queue)
+            self.t = Thread(target=self.generator_thread)
             self.t.start()
 
     def stop(self):
         self.running = False
 
     @abstractmethod
-    def add_to_queue():
+    def generator_thread():
         pass
 
 
@@ -53,7 +53,7 @@ class PoissonGenerator(JobGenerator):
     def __init__(self, args, queue):
         super().__init__(args, queue)
 
-    def add_to_queue(self):
+    def generator_thread(self):
         while self.running:
             job = self.factory.generateJob()
             self.queue.put(job)
