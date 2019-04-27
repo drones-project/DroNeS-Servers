@@ -51,11 +51,12 @@ destination: The coordinates where the item is to be delivered to (lat, lon)
 class Job:
     def __init__(self):
         self.uid = None
-        self.creation_time = None
+        self.creationTime = None
         self.content = None
-        self.weight = None
-        self.cost_function = None
-        self.pick_up = None
+        self.packageWeight = None
+        self.packageXarea = None
+        self.costFunction = None
+        self.pickup = None
         self.destination = None
 
 
@@ -90,18 +91,17 @@ class JobFactory:
         # Job creation
         job = Job()
         job.uid = self.__generateUID()
-        job.creation_time = int(time.time())
+        job.creationTime = int(time.time())
         # Assigning item to job
         item = self.__getRandomItem()
         job.content = item['item']
-        job.weight = item['weight']
+        job.packageWeight = item['weight']
+        job.packageXarea = item['cross_sectional_area']
         # Assigning cost function
-        reward = item['reward']
-        penalty = item['penalty']
-        valid_for = item['valid_for']
-        job.cost_function = NaiveCostFunction(reward, penalty, valid_for)
+        job.costFunction = NaiveCostFunction(item['reward'], item['penalty'],
+                                             item['valid_for'])
         # Assigning pick_up and destination
-        job.pick_up = randomCoords(self.args.origin, self.args.radius)
+        job.pickup = randomCoords(self.args.origin, self.args.radius)
         job.destination = randomCoords(self.args.origin, self.args.radius)
         return job.__dict__
 

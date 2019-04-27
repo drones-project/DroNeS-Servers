@@ -45,7 +45,9 @@ def getArgs():
                  'weight': float(config[s]['Weight']),
                  'reward': float(config[s]['Reward']),
                  'penalty': float(config[s]['Penalty']),
-                 'valid_for': float(config[s]['Valid_Time'])}
+                 'valid_for': float(config[s]['Valid_Time']),
+                 'cross_sectional_area': float(config[s]['CrossSectionalArea'])
+                 }
         args.job_items.append(entry)
 
     args.origin = eval(config['Settings']['dispatch_origin'])
