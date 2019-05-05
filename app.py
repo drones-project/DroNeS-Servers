@@ -7,8 +7,9 @@ from Scheduling.Scheduler import FCFSScheduler
 app = Flask(__name__)
 
 # run the scheduler
-s = FCFSScheduler()
-s.start()
+scheduler = FCFSScheduler()
+scheduler.updateTimescale(1)
+scheduler.start()
 
 
 @app.route('/')
@@ -16,21 +17,26 @@ def home():
     return "This is the root directory of the web server."
 
 
-@app.route('/routes', methods=['POST'])
+@app.route('/routes', methods=['GET', 'POST'])
 def routes():
-    if request.is_json:
-        app.logger.info(json.dumps(request.json))
-        r = Pathfinder.getRoutes(request.json)
-        return jsonify(r)
+    if request.method == 'POST':
+        app.logger.info(json.dumps(request.get_json()))
+        r = Pathfinder.getRoutes(request.get_json())
+        return jsonify(r), 200
+    elif request.method == 'GET':
+        return jsonify({'success': 'true'}), 200
     else:
         return abort(400)
 
 
-@app.route('/jobs', methods=['POST'])
+@app.route('/jobs', methods=['GET', 'POST'])
 def jobs():
-    if request.is_json:
-        app.logger.info(json.dumps(request.json))
-        return s.getJob(request.json)
+    if request.method == 'POST':
+        data = request.get_json()
+        app.logger.info(json.dumps(data))
+        return scheduler.getJob(data), 200
+    elif request.method == 'GET':
+        return jsonify({'success': 'true'}), 200
     else:
         return abort(400)
 
@@ -39,15 +45,10 @@ def jobs():
 def update_timescale():
     if request.is_json:
         app.logger.info(json.dumps(request.json))
-        s.updateTimescale(int(request.json['timescale']))
+        scheduler.updateTimescale(int(request.json['timescale']))
         return jsonify({'success': 'true'}), 200
     else:
         return abort(400)
-
-
-@app.route('/jobs_dummy')
-def jobs_dummy():
-    return s.getJob(1)
 
 
 if __name__ == '__main__':
