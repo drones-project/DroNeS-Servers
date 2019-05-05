@@ -46,7 +46,7 @@ def getArgs():
                  'reward': float(config[s]['Reward']),
                  'penalty': float(config[s]['Penalty']),
                  'valid_for': float(config[s]['Valid_Time']),
-                 'cross_sectional_area': float(config[s]['CrossSectionalArea'])
+                 'cross_sectional_area': float(config[s]['Cross_Section_Area'])
                  }
         args.job_items.append(entry)
 
