@@ -27,6 +27,18 @@ def randomCoords(coords, radius):
 
 
 '''
+Helper functions to generate random cartesian coordinates within a bounded
+square
+'''
+
+
+def randomCartesian(coords, bounds):
+    x = random.uniform(-bounds, bounds)
+    y = random.uniform(-bounds, bounds)
+    return {"x": coords[0]-x, "y": coords[1]-y}
+
+
+'''
 The Job class resembles the data structure of a job that is to be sent to the
 simulation server. More attributes can be added in the future if it describes
 a more realistic model for the simulation.
@@ -67,7 +79,7 @@ series of Jobs.
 A JobFactory should be initialised with:
 
 origin - A (lat, lon) coordinate that corresponds to a drone dispatch depot
-range - An area described by a radius of <range> meters where
+range - An area described by a bounds of <range> meters where
         the jobs (both pick-up and destination) will be limited to.
 
 The potential contents, rewards and penalty of each job can be configured in a
@@ -101,8 +113,8 @@ class JobFactory:
         job.costFunction = NaiveCostFunction(item['reward'], item['penalty'],
                                              item['valid_for'])
         # Assigning pick_up and destination
-        job.pickup = randomCoords(self.args.origin, self.args.radius)
-        job.destination = randomCoords(self.args.origin, self.args.radius)
+        job.pickup = randomCartesian(self.args.origin, self.args.bounds)
+        job.destination = randomCartesian(self.args.origin, self.args.bounds)
         return job.__dict__
 
     # Ignores the given probability of the job, and picks one at random

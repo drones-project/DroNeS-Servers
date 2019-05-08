@@ -12,7 +12,7 @@ class Args:
     def __init__(self):
         self.job_items = []
         self.origin = None
-        self.radius = None
+        self.bounds = None
         self.generator_params = None
 
 
@@ -28,7 +28,7 @@ class mockArgs:
             }
         ]
         self.origin = [0, 0]
-        self.radius = 3000
+        self.bounds = 3000
         self.generator_params = 0.1
 
 
@@ -51,7 +51,7 @@ def getArgs():
         args.job_items.append(entry)
 
     args.origin = eval(config['Settings']['dispatch_origin'])
-    args.radius = eval(config['Settings']['dispatch_radius'])
+    args.bounds = eval(config['Settings']['dispatch_bounds'])
     args.generator_params = eval(config['Job Generator']['params'])
 
     return args
