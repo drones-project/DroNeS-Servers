@@ -1,5 +1,4 @@
 import json
-
 from flask import Flask, jsonify, request, abort
 from Routing.Pathfinder import Pathfinder
 from Scheduling.Scheduler import FCFSScheduler
@@ -21,8 +20,7 @@ def home():
 def routes():
     if request.method == 'POST':
         app.logger.info(json.dumps(request.get_json()))
-        r = Pathfinder.getRoutes(request.get_json())
-        return jsonify(r), 200
+        return Pathfinder.getRoute(request.get_json()), 200
     elif request.method == 'GET':
         return jsonify({'success': 'true'}), 200
     else:
