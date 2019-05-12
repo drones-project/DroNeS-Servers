@@ -10,6 +10,11 @@ scheduler = FCFSScheduler()
 scheduler.updateTimescale(1)
 scheduler.start()
 
+# create a pathfinder
+pathfinder = Pathfinder()
+
+written = False
+
 
 @app.route('/')
 def home():
@@ -18,9 +23,10 @@ def home():
 
 @app.route('/routes', methods=['GET', 'POST'])
 def routes():
+    global written
     if request.method == 'POST':
         app.logger.info(json.dumps(request.get_json()))
-        return Pathfinder.getRoute(request.get_json()), 200
+        return pathfinder.getRoute(request.get_json()), 200
     elif request.method == 'GET':
         return jsonify({'success': 'true'}), 200
     else:
@@ -31,7 +37,7 @@ def routes():
 def jobs():
     if request.method == 'POST':
         data = request.get_json()
-        app.logger.info(json.dumps(data))
+        app.logger.debug(json.dumps(data))
         return scheduler.getJob(data), 200
     elif request.method == 'GET':
         return jsonify({'success': 'true'}), 200
@@ -42,7 +48,7 @@ def jobs():
 @app.route('/update_timescale', methods=['POST'])
 def update_timescale():
     if request.is_json:
-        app.logger.info(json.dumps(request.json))
+        app.logger.debug(json.dumps(request.json))
         scheduler.updateTimescale(int(request.json['timescale']))
         return jsonify({'success': 'true'}), 200
     else:
