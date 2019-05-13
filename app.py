@@ -1,6 +1,6 @@
 import json
 from flask import Flask, jsonify, request, abort
-from Routing.Pathfinder import DumbPathfinder
+from Routing.Pathfinder import SmartPathfinder
 from Scheduling.Scheduler import FCFSScheduler
 
 app = Flask(__name__)
@@ -11,9 +11,7 @@ scheduler.updateTimescale(1)
 scheduler.start()
 
 # create a pathfinder
-pathfinder = DumbPathfinder()
-
-written = False
+pathfinder = SmartPathfinder()
 
 
 @app.route('/')
