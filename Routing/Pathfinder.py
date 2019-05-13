@@ -31,7 +31,7 @@ class DumbPathfinder(Pathfinder):
 
 class SmartPathfinder(Pathfinder):
     def __init__(self):
-        super()
+        super(SmartPathfinder, self).__init__()
         GetBuildings(self.buildings)
 
     def getRoute(self, data):
