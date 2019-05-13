@@ -53,14 +53,24 @@ def GetBuildings(o: list):
     return  # Initialised presimulation
 
 
-def UpdateGameState(drones: int, completed: list, noflys: list):
+def CountAt(i: int, dronePositions: list):
+    count = 0
+    for j in range(len(dronePositions)):
+        if _altitudes[i] - _altDiv / 2 < dronePositions[j]["y"] < \
+           _altitudes[i] + _altDiv / 2:
+            count += 1
+    return count
+
+
+def UpdateGameState(dronePositions: list, noflys: list):
     global _droneCount, _NoFlys
-    _droneCount = drones  # total number of drones in service
+    _droneCount = len(dronePositions)  # total number of drones in service
     _NoFlys = noflys
 
     for i in range(len(_assigned)):
-        _assigned[i] -= completed[i]  # Number of jobs completed at the current
-        # altitude. Alternatively set a timer have it reduce periodically
+        _assigned[i] = CountAt(i, dronePositions)  # Number of jobs completed
+        # at the current altitude. Alternatively set a timer have it reduce
+        # periodically
 
 
 def RotationY(theta: float):

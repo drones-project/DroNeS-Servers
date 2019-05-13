@@ -35,12 +35,8 @@ class SmartPathfinder(Pathfinder):
         GetBuildings(self.buildings)
 
     def getRoute(self, data):
-        nfzs = []
-        for nfz in data['noFlyZones']:
-            nfzs.append(StaticObstacle(nfz))
-        zeroes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        numDrones = len(data['dronePositions'])
-        UpdateGameState(numDrones, zeroes, nfzs)
+        nfzs = [StaticObstacle(nfz) for nfz in data['noFlyZones']]
+        UpdateGameState(data['dronePositions'], nfzs)
 
         origin = np.array([[data['origin']['x']],
                            [data['origin']['y']],
