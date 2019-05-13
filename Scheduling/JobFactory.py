@@ -1,29 +1,6 @@
-import math
 import random
 import time
 from .CostFunction import NaiveCostFunction
-
-'''
-Helper functions to generate random (lat, lon)s within a radius of another
-(lat, lon)
-'''
-EARTH_RADIUS = 6371  # km
-# 1 degree latitute in meters
-ONE_DEG = EARTH_RADIUS * 2 * math.pi / 360 * 1000
-
-
-def randomPointOnDisk(radius):
-    r = radius * random.uniform(0, 1)
-    theta = random.uniform(0, 1) * 2 * math.pi
-    return [r * math.cos(theta), r * math.sin(theta)]
-
-
-def randomCoords(coords, radius):
-    dx, dy = randomPointOnDisk(radius)
-    random_lat = coords[0] + (dy / ONE_DEG)
-    random_lon = coords[1] + \
-        (dx / (ONE_DEG * math.cos(coords[0] * math.pi / 180)))
-    return {"x": random_lat, "y": random_lon}
 
 
 '''
@@ -34,8 +11,8 @@ square
 
 def randomCartesian(coords, bounds):
     x = random.uniform(-bounds, bounds)
-    y = random.uniform(-bounds, bounds)
-    return {"x": coords[0]-x, "y": coords[1]-y}
+    z = random.uniform(-bounds, bounds)
+    return {"x": coords[0]+x, "y": 0, "z": coords[1]+z}
 
 
 '''
