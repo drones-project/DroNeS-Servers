@@ -1,6 +1,6 @@
 import json
 from flask import Flask, jsonify, request, abort
-from Routing.Pathfinder import Pathfinder
+from Routing.Pathfinder import DumbPathfinder
 from Scheduling.Scheduler import FCFSScheduler
 
 app = Flask(__name__)
@@ -11,7 +11,7 @@ scheduler.updateTimescale(1)
 scheduler.start()
 
 # create a pathfinder
-pathfinder = Pathfinder()
+pathfinder = DumbPathfinder()
 
 written = False
 
@@ -37,8 +37,12 @@ def routes():
 def jobs():
     if request.method == 'POST':
         data = request.get_json()
-        app.logger.debug(json.dumps(data))
-        return scheduler.getJob(data), 200
+        # app.logger.info(json.dumps(data))
+        job = scheduler.getJob(data)
+        app.logger.info("Giving job...")
+        app.logger.info(job)
+        app.logger.info("")
+        return job, 200
     elif request.method == 'GET':
         return jsonify({'success': 'true'}), 200
     else:
