@@ -35,6 +35,8 @@ class SmartPathfinder(Pathfinder):
         GetBuildings(self.buildings)
 
     def getRoute(self, data):
+        if len(data) == 0:
+            return json.dumps({'waypoints': []})
         nfzs = [StaticObstacle(nfz) for nfz in data['noFlyZones']]
         UpdateGameState(data['dronePositions'], nfzs)
 
