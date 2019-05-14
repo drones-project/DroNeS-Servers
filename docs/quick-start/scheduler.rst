@@ -16,6 +16,10 @@ Location Generation
 
   This determines the width and height of the square around the given `dispatch_origin` center.
 
+* ``min_distance``
+
+  This determines the minimum distance between the pickup and dropoff coordinates of a job.
+
 List of Jobs
 ==============
 
