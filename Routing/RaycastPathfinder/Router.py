@@ -90,7 +90,6 @@ def ChooseAltitude(origin: np.ndarray, dest: np.ndarray):
     maxIndex = len(_assigned) - 1
     for i in range(start, len(_assigned), 2):
         # maximise altitude, minimize traffic, + 1 to prevent singularity
-
         tmp = altitudes()[i] / _maxAlt / (_assigned[i] / _droneCount + 1)
         if tmp > max:
             max = tmp
@@ -215,7 +214,7 @@ def _findWaypoint(obs: StaticObstacle, start: np.ndarray, end: np.ndarray,
         a = obs.verts[j] + _R_d * normalize(obs.verts[j] - obs.position)
         b = obs.verts[(j + 1) % 4] + _R_d * \
             normalize(obs.verts[(j + 1) % 4] - obs.position)
-        waypoint = (b, a)[magnitude(a - start) > _epsilon]
+        waypoint = a if magnitude(a - start) > _epsilon else b
     else:
         # opposite faces intersection
         a = obs.verts[indices[0]] + _R_d * \
@@ -226,9 +225,11 @@ def _findWaypoint(obs: StaticObstacle, start: np.ndarray, end: np.ndarray,
 
         if magnitude(a - start) > _epsilon and magnitude(b - start) > _epsilon:
             # Gets the waypoint with the smallest deviation angle from the path
-            waypoint = (b, a)[
-                abs(dot(normalize(a - start), _dir)) >
-                abs(dot(normalize(b - start), _dir))]
+            if abs(dot(normalize(a - start), _dir)) > \
+               abs(dot(normalize(b - start), _dir)):
+               waypoint = a
+            else:
+               waypoint = b
         else:
             # I think its possible for opposite face intersection to obtain the
             # same point again but I might be wrong, this is to prevent it
@@ -240,12 +241,7 @@ def _findWaypoint(obs: StaticObstacle, start: np.ndarray, end: np.ndarray,
     return waypoint
 
 
-frame = 0
-
-
 def _navigate(start: np.ndarray, end: np.ndarray, alt: float):
-    global frame
-    frame += 1
     waypoints = [start]
     dir = end - start
     if magnitude(dir) < _epsilon:  # if start = end, then return start
@@ -277,7 +273,6 @@ def _navigate(start: np.ndarray, end: np.ndarray, alt: float):
     k = 0
     while (buildings.size() > 0 and k < 5):
         obs = buildings.pop()
-        print(alt)
         intersects, indices = _findIntersect(obs, start, end)
         if intersects > 0:
             k += 1
