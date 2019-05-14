@@ -227,9 +227,9 @@ def _findWaypoint(obs: StaticObstacle, start: np.ndarray, end: np.ndarray,
             # Gets the waypoint with the smallest deviation angle from the path
             if abs(dot(normalize(a - start), _dir)) > \
                abs(dot(normalize(b - start), _dir)):
-               waypoint = a
+                waypoint = a
             else:
-               waypoint = b
+                waypoint = b
         else:
             # I think its possible for opposite face intersection to obtain the
             # same point again but I might be wrong, this is to prevent it
