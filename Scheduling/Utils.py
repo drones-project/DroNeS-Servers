@@ -24,7 +24,8 @@ class mockArgs:
                 "weight": 10,
                 "reward": 10,
                 "penalty": 10,
-                "valid_for": 10
+                "valid_for": 10,
+                "cross_sectional_area": 10
             }
         ]
         self.origin = [0, 0]
