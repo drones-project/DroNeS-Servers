@@ -9,10 +9,12 @@ from Routing.RaycastPathfinder.DataStructures import StaticObstacle
 
 class Pathfinder(ABC):
     def __init__(self):
-        # load the buildings
-        file = os.path.join(os.path.dirname(__file__), 'buildings.json')
         self.buildings = []
-        Buildings = json.load(open(file))['buildings']
+
+    def loadBuildings(self, filename):
+        file = os.path.join(os.path.dirname(__file__), filename)
+        with open(file) as f:
+            Buildings = json.load(f)['buildings']
         for building in Buildings:
             self.buildings.append(StaticObstacle(building))
 
@@ -30,15 +32,16 @@ class DumbPathfinder(Pathfinder):
 
 
 class SmartPathfinder(Pathfinder):
-    def __init__(self):
-        super(SmartPathfinder, self).__init__()
+    def __init__(self, filename='buildings.json'):
+        super().__init__()
+        self.loadBuildings(filename)
         GetBuildings(self.buildings)
 
     def getRoute(self, data):
         if len(data) == 0:
             return json.dumps({'waypoints': []})
-        nfzs = [StaticObstacle(nfz) for nfz in data['noFlyZones']]
-        UpdateGameState(data['dronePositions'], nfzs)
+        self.nfzs = [StaticObstacle(nfz) for nfz in data['noFlyZones']]
+        UpdateGameState(data['dronePositions'], self.nfzs)
 
         origin = np.array([[data['origin']['x']],
                            [data['origin']['y']],
@@ -50,6 +53,8 @@ class SmartPathfinder(Pathfinder):
         tmp = Route(origin, destination, not data['onJob'])
         res = {'waypoints': []}
         for i in tmp:
-            waypoint = {'x': i[0][0], 'y': i[1][0], 'z': i[2][0]}
+            waypoint = {'x': float(i[0][0]),
+                        'y': float(i[1][0]),
+                        'z': float(i[2][0])}
             res['waypoints'].append(waypoint)
         return json.dumps(res)
