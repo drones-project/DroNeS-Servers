@@ -1,0 +1,11 @@
+{
+   "$schema":"http://json-schema.org/draft-04/schema#",
+   "title": "Cost Function Schema",
+   "type": "object",
+   "properties": {
+      "reward": {"type": "number"},
+      "penalty": {"type": "number"},
+      "valid_time": {"type": "number"}
+   },
+   "required": ["reward", "penalty", "valid_time"]
+}

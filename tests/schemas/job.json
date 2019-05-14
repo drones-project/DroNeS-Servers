@@ -1,54 +1,25 @@
 {
-   "$schema":"http://json-schema.org/draft-04/schema#",
-   "title":"Job Schema",
-   "type":"object",
-   "properties":{
-      "uid":{
-         "type":"integer"
-      },
-      "creation_time":{
-         "type":"integer"
-      },
-      "content":{
-         "type":"string"
-      },
-      "cost_function":{
-         "description":"List of cost function attributes",
-         "type":"object",
-         "properties":{
-            "type":{
-               "type":"string"
-            },
-            "reward":{
-               "type":"integer"
-            },
-            "penalty":{
-               "type":"integer"
-            },
-            "valid_time":{
-               "type":"integer"
-            }
-         },
-         "required":[
-            "type",
-            "reward",
-            "penalty",
-            "valid_time"
-         ]
-      },
-      "pick_up":{
-         "type":"object"
-      },
-      "destination":{
-         "type":"object"
-      }
+   "$schema": "http://json-schema.org/draft-04/schema#",
+   "title": "Job Schema",
+   "type": "object",
+   "properties": {
+      "uid": {"type": "integer"},
+      "creationTime": {"type":"integer"},
+      "content": {"type":"string"},
+      "packageWeight": {"type":"number"},
+      "packageXarea": {"type":"number"},
+      "cost_function": {"$ref": "file:tests/schemas/cost_function.json"},
+      "pickup": {"$ref": "file:tests/schemas/vector2.json"},
+      "destination": {"$ref": "file:tests/schemas/vector2.json"}
    },
    "required":[
       "uid",
-      "creation_time",
+      "creationTime",
       "content",
-      "cost_function",
-      "pick_up",
+      "packageWeight",
+      "packageXarea",
+      "costFunction",
+      "pickup",
       "destination"
    ]
 }

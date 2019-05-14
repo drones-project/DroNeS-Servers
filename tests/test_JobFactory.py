@@ -1,8 +1,10 @@
+import ast
 import json
 import os
 import unittest
-from Scheduling.JobFactory import JobFactory
-from Scheduling.Utils import mockArgs
+from Scheduling.JobFactory import JobFactory, Job
+from Scheduling.Utils import mockArgs, Encoder
+from jsonschema import validate
 
 
 def load_schema(filename):
@@ -16,8 +18,26 @@ class JobFactoryTest(unittest.TestCase):
         self.args = mockArgs()
         self.factory = JobFactory(self.args)
 
-    def testNull(self):
+    def testGenerateJobCreatesAJob(self):
+        job = self.factory.generateJob()
+        assert(type(job) == Job)
         return
+
+    def testJobUIDIsSequential(self):
+        job = self.factory.generateJob()
+        assert(job.uid == 1)
+        job = self.factory.generateJob()
+        assert(job.uid == 2)
+        job = self.factory.generateJob()
+        assert(job.uid == 3)
+        return
+
+    def testJobObjectIsConsistentWithSchema(self):
+        job = self.factory.generateJob()
+        # convert to json string then back to dict
+        job = eval(json.dumps(job, cls=Encoder))
+        validate(job, load_schema('job.json'))
+
 
 
 if __name__ == "__main__":
