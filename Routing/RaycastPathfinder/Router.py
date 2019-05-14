@@ -276,11 +276,11 @@ def _navigate(start: np.ndarray, end: np.ndarray, alt: float):
     # 5 is arbitrary but loop through a few in case some buildings overlap
     k = 0
     while (buildings.size() > 0 and k < 5):
-        k += 1
         obs = buildings.pop()
         print(alt)
         intersects, indices = _findIntersect(obs, start, end)
         if intersects > 0:
+            k += 1
             intersected = True
             v = _findWaypoint(obs, start, end, indices)
             possibilities.push(v)
