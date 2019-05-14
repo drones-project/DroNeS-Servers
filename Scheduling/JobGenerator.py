@@ -60,7 +60,8 @@ class JobGenerator(ABC):
         self._should_continue = False
 
     def updateTimescale(self, timescale):
-        self.stop()
+        if self.thread is not None:
+            self.thread.cancel()
         self.timescale = timescale
         if self._should_continue:
             self._start_timer()

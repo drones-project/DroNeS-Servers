@@ -1,10 +1,11 @@
 import json
 import queue
+import time
 from abc import ABC, abstractmethod
 from .JobGenerator import PoissonGenerator
 from .Utils import Encoder, getArgs
 
-'''
+"""
 A JobScheduler is the final component of scheduling and that serves as the
 interface between the simulation server and the web server.
 
@@ -23,7 +24,7 @@ Methods:
                   simulation data, including number of idle drones (so a buffer
                   of emergency drones can be reserved. A schema of can be found
                   in the schema folder.
-'''
+"""
 
 
 # Simple base class that all other schedulers should inherit from.
@@ -34,8 +35,8 @@ class JobScheduler(ABC):
     def __init__(self, args):
         self.args = args
         self.sortedQueue = []
-        self.jobQueue = queue.Queue()
-        self.generator = PoissonGenerator(args, self.jobQueue)
+        self.backlog = queue.Queue()
+        self.generator = PoissonGenerator(args, self.backlog)
 
     def start(self):
         self.generator.start()
@@ -43,8 +44,9 @@ class JobScheduler(ABC):
     def stop(self):
         self.generator.stop()
 
+    @abstractmethod
     def updateTimescale(self, timescale):
-        self.generator.updateTimescale(timescale)
+        pass
 
     @abstractmethod
     def getJob(self, data):
@@ -59,14 +61,30 @@ class FCFSScheduler(JobScheduler):
         super().__init__(args)
 
     def getJob(self, data):
-        self.__processQueue(data)
-        if (len(self.sortedQueue) > 0):
+        self.__processQueue()
+        if len(self.sortedQueue) > 0:
             job = self.sortedQueue.pop(0)
+            job = self.__ageJob(job)
         else:
             job = {}
         return json.dumps(job, cls=Encoder)
 
-    def __processQueue(self, data):
-        for i in range(self.jobQueue.qsize()):
-            job = self.jobQueue.get()
+    def updateTimescale(self, timescale):
+        self.__processQueue()
+        for job in self.sortedQueue:
+            self.__ageJob(job)
+        self.generator.updateTimescale(timescale)
+
+    def __processQueue(self):
+        # empty the backlog queue into the 'sorted' queue
+        for i in range(self.backlog.qsize()):
+            job = self.backlog.get()
             self.sortedQueue.append(job)
+
+    def __ageJob(self, job):
+        # 'ages' a job
+        job.costFunction.valid_time -= (
+            int(time.time()) - job.creationTime
+        ) * self.generator.timescale
+        job.creationTime = int(time.time())
+        return job

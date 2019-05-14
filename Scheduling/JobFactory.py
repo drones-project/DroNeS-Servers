@@ -92,7 +92,7 @@ class JobFactory:
         # Assigning pick_up and destination
         job.pickup = randomCartesian(self.args.origin, self.args.bounds)
         job.destination = randomCartesian(self.args.origin, self.args.bounds)
-        return job.__dict__
+        return job
 
     # Ignores the given probability of the job, and picks one at random
     def __getRandomItem(self):
