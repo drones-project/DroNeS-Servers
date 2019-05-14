@@ -54,7 +54,7 @@ def getArgs():
 
     args.origin = eval(config['Settings']['dispatch_origin'])
     args.bounds = eval(config['Settings']['dispatch_bounds'])
-    args.min_dist = eval(config['Settings']['dispatch_bounds'])
-    args.generator_params = eval(config['Job Generator']['min_distance'])
+    args.min_dist = eval(config['Settings']['min_distance'])
+    args.generator_params = eval(config['Job Generator']['params'])
 
     return args
