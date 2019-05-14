@@ -3,6 +3,11 @@ exclude_lines =
     pragma: no cover
     @abstract
     unittest.main()
+    if __name__ == '__main__':
+    app.run(debug=True, port=5000)
+
 
 omit =
     *__init__.py
+    tests/*
+    Scheduling/Utils.py
