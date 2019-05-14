@@ -46,7 +46,7 @@ def update_timescale():
     if request.is_json:
         data = request.get_json()
         app.logger.debug(json.dumps(data))
-        scheduler.updateTimescale(data['timescale']))
+        scheduler.updateTimescale(data['timescale'])
         return jsonify({'success': 'true'}), 200
     else:
         return abort(400)

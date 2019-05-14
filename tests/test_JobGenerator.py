@@ -1,5 +1,3 @@
-import json
-import os
 import queue
 import time
 import unittest
@@ -19,7 +17,7 @@ class JobGeneratorTest(unittest.TestCase):
 
     def testStartingWithZeroTimescaleDoesNothing(self):
         self.generator.start()
-        assert(self.generator.thread == None)
+        assert(self.generator.thread is None)
         return
 
     def testCanChangeTimescale(self):
@@ -34,16 +32,16 @@ class JobGeneratorTest(unittest.TestCase):
     def testUpdatingTimescaleStartsTheGenerator(self):
         self.generator.start()
         self.generator.updateTimescale(1)
-        assert(self.generator.thread != None)
+        assert(self.generator.thread is not None)
         self.generator.stop()
         return
 
     def testStopCancelsTheGeneratorThread(self):
         self.generator.updateTimescale(1)
         self.generator.start()
-        assert(self.generator.thread != None)
+        assert(self.generator.thread is not None)
         self.generator.stop()
-        assert(self.generator.thread.finished._flag == True)
+        assert(self.generator.thread.finished._flag is True)
         return
 
     def testGeneratorCreatesAJobEventually(self):
@@ -56,6 +54,7 @@ class JobGeneratorTest(unittest.TestCase):
         assert(self.queue.qsize() > 0)
         self.generator.stop()
         return
+
 
 if __name__ == "__main__":
     unittest.main()

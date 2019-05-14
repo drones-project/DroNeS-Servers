@@ -1,4 +1,3 @@
-import ast
 import json
 import os
 import unittest
@@ -37,7 +36,6 @@ class JobFactoryTest(unittest.TestCase):
         # convert to json string then back to dict
         job = eval(json.dumps(job, cls=Encoder))
         validate(job, load_schema('job.json'))
-
 
 
 if __name__ == "__main__":
