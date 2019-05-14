@@ -9,8 +9,8 @@
       "packageWeight": {"type":"number"},
       "packageXarea": {"type":"number"},
       "cost_function": {"$ref": "file:tests/schemas/cost_function.json"},
-      "pickup": {"$ref": "file:tests/schemas/vector2.json"},
-      "destination": {"$ref": "file:tests/schemas/vector2.json"}
+      "pickup": {"$ref": "file:tests/schemas/vector3.json"},
+      "destination": {"$ref": "file:tests/schemas/vector3.json"}
    },
    "required":[
       "uid",
