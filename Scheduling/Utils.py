@@ -30,6 +30,7 @@ class mockArgs:
         ]
         self.origin = [0, 0]
         self.bounds = 3000
+        self.min_dist = 500
         self.generator_params = 0.1
 
 
@@ -53,6 +54,7 @@ def getArgs():
 
     args.origin = eval(config['Settings']['dispatch_origin'])
     args.bounds = eval(config['Settings']['dispatch_bounds'])
-    args.generator_params = eval(config['Job Generator']['params'])
+    args.min_dist = eval(config['Settings']['dispatch_bounds'])
+    args.generator_params = eval(config['Job Generator']['min_distance'])
 
     return args

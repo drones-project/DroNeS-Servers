@@ -1,21 +1,38 @@
+import math
 import random
 import time
 from .CostFunction import NaiveCostFunction
 
 
-'''
+"""
 Helper functions to generate random cartesian coordinates within a bounded
 square
-'''
+"""
 
 
 def randomCartesian(coords, bounds):
     x = random.uniform(-bounds, bounds)
     z = random.uniform(-bounds, bounds)
-    return {"x": coords[0]+x, "y": 0, "z": coords[1]+z}
+    return {"x": coords[0] + x, "y": 0, "z": coords[1] + z}
 
 
-'''
+def distance(point1, point2):
+    return math.sqrt(
+        (point1["x"] - point2["x"]) ** 2 + (point1["y"] - point2["y"]) ** 2
+    )
+
+
+def generateCoordsPair(coords, bounds, min_dist=None):
+    first = randomCartesian(coords, bounds)
+    second = randomCartesian(coords, bounds)
+    if min_dist is not None:
+        while distance(first, second) < min_dist:
+            first = randomCartesian(coords, bounds)
+            second = randomCartesian(coords, bounds)
+    return first, second
+
+
+"""
 The Job class resembles the data structure of a job that is to be sent to the
 simulation server. More attributes can be added in the future if it describes
 a more realistic model for the simulation.
@@ -34,7 +51,7 @@ cost_function: An instance of CostFunction that allows the job holder to
 pick_up: The coordinates where the item is to be picked up from (lat, lon)
 
 destination: The coordinates where the item is to be delivered to (lat, lon)
-'''
+"""
 
 
 class Job:
@@ -49,14 +66,14 @@ class Job:
         self.destination = None
 
 
-'''
+"""
 The JobFactory class is a convenient interface that can be used to generate a
 series of Jobs.
 
 A JobFactory should be initialised with:
 
 origin - A (lat, lon) coordinate that corresponds to a drone dispatch depot
-range - An area described by a bounds of <range> meters where
+range - An area described by a bounds of  meters where
         the jobs (both pick-up and destination) will be limited to.
 
 The potential contents, rewards and penalty of each job can be configured in a
@@ -68,7 +85,7 @@ can be determined by `Job['cost_function'].getReward(0)`.
 
 The creation_time of the job is set to the UNIX timestamp (time.time()) at the
 time when `generateJob()` was called.
-'''
+"""
 
 
 class JobFactory:
@@ -83,15 +100,17 @@ class JobFactory:
         job.creationTime = int(time.time())
         # Assigning item to job
         item = self.__getRandomItem()
-        job.content = item['item']
-        job.packageWeight = item['weight']
-        job.packageXarea = item['cross_sectional_area']
+        job.content = item["item"]
+        job.packageWeight = item["weight"]
+        job.packageXarea = item["cross_sectional_area"]
         # Assigning cost function
-        job.costFunction = NaiveCostFunction(item['reward'], item['penalty'],
-                                             item['valid_for'])
+        job.costFunction = NaiveCostFunction(
+            item["reward"], item["penalty"], item["valid_for"]
+        )
         # Assigning pick_up and destination
-        job.pickup = randomCartesian(self.args.origin, self.args.bounds)
-        job.destination = randomCartesian(self.args.origin, self.args.bounds)
+        job.pickup, job.destination = generateCoordsPair(
+            self.args.origin, self.args.bounds, self.args.min_dist
+        )
         return job
 
     # Ignores the given probability of the job, and picks one at random
