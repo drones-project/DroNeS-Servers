@@ -1,19 +1,9 @@
 {
    "$schema":"http://json-schema.org/draft-04/schema#",
-   "title":"Route Schema",
+   "title":"Router Response Schema",
    "type":"object",
    "properties":{
-      "waypoints":{
-         "description":"Coordinates of delivery points for the drone",
-         "type":"array"
-      },
-      "drone_id":{
-         "description":"ID of the drone",
-         "type":"integer"
-      }
+      "waypoints": {"type": "array"}
    },
-   "required":[
-      "waypoints",
-      "drone_id"
-   ]
+   "required":["waypoints"]
 }
