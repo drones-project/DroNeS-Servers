@@ -1,4 +1,6 @@
+import json
 import math
+import os
 import random
 import time
 from .CostFunction import NaiveCostFunction
@@ -29,6 +31,54 @@ def generateCoordsPair(coords, bounds, min_dist=None):
         while distance(first, second) < min_dist:
             first = randomCartesian(coords, bounds)
             second = randomCartesian(coords, bounds)
+    return first, second
+
+
+"""
+Helper functions to ensure that generated jobs do not end up on building tops
+"""
+
+
+class Scene:
+    boundary = None
+
+
+def __isClockwise(a, b, c):
+    val = (b["z"] - a["z"]) * (c["x"] - b["x"]) - \
+          (b["x"] - a["x"]) * (c["z"] - b["z"])
+    return (val > 0)
+
+
+def __willIntersect(a1, a2, b1, b2):
+    o1 = __isClockwise(a1, a2, b1)
+    o2 = __isClockwise(a1, a2, b2)
+    o3 = __isClockwise(b1, b2, a1)
+    o4 = __isClockwise(b1, b2, a2)
+    return (o1 != o2 and o3 != o4)
+
+
+def isContained(point):
+    x, z = point["x"], point["z"]
+    if (Scene.boundary is None):
+        print("here")
+        file = os.path.join(os.path.dirname(__file__), "boundary.json")
+        with open(file) as f:
+            Scene.boundary = json.load(f)
+    p1 = {"x": x, "y": 0, "z": z}
+    p2 = {"x": x + 10000000, "y": 0, "z": z}
+
+    k = 0
+    for i in range(len(Scene.boundary)):
+        nxt = (i + 1) % len(Scene.boundary)
+        if __willIntersect(Scene.boundary[i], Scene.boundary[nxt], p1, p2):
+            k += 1
+    return (k % 2) == 1
+
+
+def generateContainedCoords(coords, bounds, min_dist=None):
+    first, second = generateCoordsPair(coords, bounds, min_dist)
+    while not isContained(first) or not isContained(second):
+        first, second = generateCoordsPair(coords, bounds, min_dist)
     return first, second
 
 
@@ -108,7 +158,7 @@ class JobFactory:
             item["reward"], item["penalty"], item["valid_for"]
         )
         # Assigning pick_up and destination
-        job.pickup, job.destination = generateCoordsPair(
+        job.pickup, job.destination = generateContainedCoords(
             self.args.origin, self.args.bounds, self.args.min_dist
         )
         return job
