@@ -80,4 +80,4 @@ class PoissonGenerator(JobGenerator):
         super().__init__(args, queue)
 
     def _sleep(self):
-        return - math.log(random.uniform(0, 1)) / self.args.generator_params
+        return - math.log(random.uniform(0, 1)) / self.args.generator_param

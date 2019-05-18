@@ -114,6 +114,7 @@ class Job:
         self.costFunction = None
         self.pickup = None
         self.destination = None
+        self.droneUID = None
 
 
 """
@@ -142,6 +143,10 @@ class JobFactory:
     def __init__(self, args):
         self.args = args
         self.counter = 0
+        if args.bound_check:
+            self.point_generator = generateContainedCoords
+        else:
+            self.point_generator = generateCoordsPair
 
     def generateJob(self):
         # Job creation
@@ -158,7 +163,7 @@ class JobFactory:
             item["reward"], item["penalty"], item["valid_for"]
         )
         # Assigning pick_up and destination
-        job.pickup, job.destination = generateContainedCoords(
+        job.pickup, job.destination = self.point_generator(
             self.args.origin, self.args.bounds, self.args.min_dist
         )
         return job

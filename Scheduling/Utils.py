@@ -31,7 +31,10 @@ class mockArgs:
         self.origin = [0, 0]
         self.bounds = 3000
         self.min_dist = 500
-        self.generator_params = 0.1
+        self.bound_check = True
+        self.scheduler = 'FCFS'
+        self.generator = 'Poisson'
+        self.generator_param = 0.1
 
 
 def getArgs():
@@ -52,9 +55,14 @@ def getArgs():
                  }
         args.job_items.append(entry)
 
-    args.origin = eval(config['Settings']['dispatch_origin'])
-    args.bounds = eval(config['Settings']['dispatch_bounds'])
-    args.min_dist = eval(config['Settings']['min_distance'])
-    args.generator_params = eval(config['Job Generator']['params'])
+    settings = config['Settings']
+    args.origin = eval(settings.get('dispatch_origin', '[0, 0]'))
+    args.bounds = eval(settings.get('dispatch_bounds', '1000'))
+    args.min_dist = eval(settings.get('min_distance', 'None'))
+    args.bound_check = eval(settings.get('bound_check', 'True'))
+
+    args.scheduler = settings.get('scheduler', 'FCFS')
+    args.generator = settings.get('generator', 'Poisson')
+    args.generator_param = eval(settings.get('generator_param', '1'))
 
     return args

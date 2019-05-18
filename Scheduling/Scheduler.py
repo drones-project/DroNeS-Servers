@@ -36,7 +36,11 @@ class JobScheduler(ABC):
         self.args = args
         self.sortedQueue = []
         self.backlog = queue.Queue()
-        self.generator = PoissonGenerator(args, self.backlog)
+        if args.generator == "Poisson":
+            self.generator = PoissonGenerator(args, self.backlog)
+        # default to poisson generator
+        else:
+            self.generator = PoissonGenerator(args, self.backlog)
 
     def start(self):
         self.generator.start()
@@ -65,6 +69,7 @@ class FCFSScheduler(JobScheduler):
         if len(self.sortedQueue) > 0:
             job = self.sortedQueue.pop(0)
             job = self.__ageJob(job)
+            job.droneUID = data["requester"]
         else:
             job = {}
         return json.dumps(job, cls=Encoder)
