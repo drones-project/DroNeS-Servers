@@ -33,7 +33,7 @@ class JobFactoryTest(unittest.TestCase):
 
     def testJobObjectIsConsistentWithSchema(self):
         job = self.factory.generateJob()
-        job.droneUID = 0;
+        job.droneUID = 0
         # convert to json string then back to dict
         job = eval(json.dumps(job, cls=Encoder))
         validate(job, load_schema('job.json'))
